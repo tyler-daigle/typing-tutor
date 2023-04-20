@@ -1,6 +1,8 @@
 import { useState, useEffect, useCallback } from "react";
 import { CharData } from "./types/types";
 import { TypingTutorText } from "./components/TypingTutor";
+import { KeyboardDisplay } from "./components/KeyboardDisplay";
+
 import styles from "../styles/Home.module.css";
 
 function createCharData(text: string): CharData[] {
@@ -11,7 +13,6 @@ function createCharData(text: string): CharData[] {
       charData.push({ expectedChar: char, typedChar: "" });
     });
   }
-
   return charData;
 }
 
@@ -21,6 +22,7 @@ export default function Index() {
   const [typedChar, setTypedChar] = useState({ key: "" });
   const [charIndex, setCharIndex] = useState(0);
   const [isKeyboardActive, setIsKeyboardActive] = useState(true);
+  const [keyDownKeys, setKeyDownKeys] = useState<string[]>([]);
 
   // there are two listeners for keypresses because 'keypress' event doesn't catch backspace.
   // using keypress event also ignores other keypresses, such as arrow keys.
@@ -28,26 +30,54 @@ export default function Index() {
     setTypedChar({ key: e.key });
   }, []);
 
-  const backspaceListener = useCallback((e: KeyboardEvent) => {
+  /*
+    keydown event listener 
+
+    It takes care of the backspace character being typed and also adds the 
+    keys to the keyDownKeys array while the key is being held down. It
+    does NOT actually set the typedChar - that is handled by the keypress event
+    listener which is keyboardListener().
+  */
+  const keydownListener = useCallback((e: KeyboardEvent) => {
     if (e.key === "Backspace") {
       setTypedChar({ key: e.key });
+    } else {
+      setKeyDownKeys((keys) => {
+        if (keys.indexOf(e.key) !== -1) {
+          // don't add the same key twice if it is being held down
+          return keys;
+        }
+        return [...keys, e.key];
+      });
     }
+  }, []);
+
+  /*
+    keyup event handler for when a key is released - it will be removed from
+    the array.
+  */
+  const keyupListener = useCallback((e: KeyboardEvent) => {
+    //remove the key from the array
+    setKeyDownKeys((keys) => keys.filter((key) => key !== e.key));
   }, []);
 
   const initListeners = () => {
     window.addEventListener("keypress", keyboardListener);
-    window.addEventListener("keydown", backspaceListener);
+    window.addEventListener("keydown", keydownListener);
+    window.addEventListener("keyup", keyupListener);
   };
 
   const killListeners = () => {
     window.removeEventListener("keypress", keyboardListener);
-    window.removeEventListener("keydown", backspaceListener);
+    window.removeEventListener("keydown", keydownListener);
+    window.removeEventListener("keyup", keyupListener);
   };
 
   useEffect(() => {
     const td = createCharData(currentText);
     setTextData(td);
-    initListeners();
+    // initListeners();
+    setIsKeyboardActive(true);
     return () => {
       killListeners();
     };
@@ -86,10 +116,12 @@ export default function Index() {
     setTextData(td);
   }, [typedChar]);
 
+  console.log(keyDownKeys);
   return (
     <div className={styles.mainContainer}>
       <h1>Typing Tutor!</h1>
       <TypingTutorText cursorPos={charIndex} textData={textData} />
+      <KeyboardDisplay keys={keyDownKeys} />
       <button
         type="button"
         onClick={() => setIsKeyboardActive(!isKeyboardActive)}
