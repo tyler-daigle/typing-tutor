@@ -57,6 +57,9 @@ function TypingTutorChar({
       break;
     case "wrong":
       style = styles.wrongLetter;
+      if (currentChar === " ") {
+        currentChar = "_";
+      }
       break;
     case "empty":
       style = styles.emptyLetter;
