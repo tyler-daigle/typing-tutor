@@ -1,0 +1,32 @@
+.emptyLetter {
+    color: gray;
+}
+
+.correctLetter {
+    color: black;
+}
+
+.wrongLetter {
+    color: red;
+}
+
+.cursor {    
+    animation: blinkingCursor 900ms infinite steps(2, jump-none);
+}
+
+@keyframes blinkingCursor {
+    from {
+        background-color: black;
+        color: white;
+    }
+
+    to {
+        background-color: transparent;
+        color: black;
+    }
+}
+
+.typingInputContainer {
+    font-family: 'Roboto Mono', monospace;
+
+}
