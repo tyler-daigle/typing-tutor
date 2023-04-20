@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { CharData } from "./types/types";
 import { TypingTutorText } from "./components/TypingTutor";
 import styles from "../styles/Home.module.css";
@@ -20,28 +20,47 @@ export default function Index() {
   const [textData, setTextData] = useState<CharData[]>([]);
   const [typedChar, setTypedChar] = useState({ key: "" });
   const [charIndex, setCharIndex] = useState(0);
+  const [isKeyboardActive, setIsKeyboardActive] = useState(true);
 
-  const keyboardListener = (e: KeyboardEvent) => {
+  // there are two listeners for keypresses because 'keypress' event doesn't catch backspace.
+  // using keypress event also ignores other keypresses, such as arrow keys.
+  const keyboardListener = useCallback((e: KeyboardEvent) => {
     setTypedChar({ key: e.key });
-    console.log(e);
-  };
+  }, []);
 
-  const backspaceListener = (e: KeyboardEvent) => {
+  const backspaceListener = useCallback((e: KeyboardEvent) => {
     if (e.key === "Backspace") {
       setTypedChar({ key: e.key });
     }
+  }, []);
+
+  const initListeners = () => {
+    window.addEventListener("keypress", keyboardListener);
+    window.addEventListener("keydown", backspaceListener);
+  };
+
+  const killListeners = () => {
+    window.removeEventListener("keypress", keyboardListener);
+    window.removeEventListener("keydown", backspaceListener);
   };
 
   useEffect(() => {
     const td = createCharData(currentText);
     setTextData(td);
-    window.addEventListener("keypress", keyboardListener);
-    window.addEventListener("keydown", backspaceListener);
+    initListeners();
     return () => {
-      window.removeEventListener("keypress", keyboardListener);
-      window.removeEventListener("keydown", backspaceListener);
+      killListeners();
     };
   }, []);
+
+  useEffect(() => {
+    console.log("toggling keyboard input");
+    if (isKeyboardActive === false) {
+      killListeners();
+    } else {
+      initListeners();
+    }
+  }, [isKeyboardActive]);
 
   useEffect(() => {
     // check for end of the text
@@ -57,7 +76,6 @@ export default function Index() {
 
     if (typedChar.key === "Backspace" && charIndex > 0) {
       td[charIndex - 1].typedChar = "";
-      console.log("bs");
       if (charIndex > 0) {
         setCharIndex(charIndex - 1);
       }
@@ -65,7 +83,6 @@ export default function Index() {
       td[charIndex].typedChar = typedChar.key;
       setCharIndex(charIndex + 1);
     }
-    console.log(typedChar);
     setTextData(td);
   }, [typedChar]);
 
@@ -73,13 +90,12 @@ export default function Index() {
     <div className={styles.mainContainer}>
       <h1>Typing Tutor!</h1>
       <TypingTutorText cursorPos={charIndex} textData={textData} />
-      {/* {textData.length !== 0 && (
-        <div>
-          {textData.map((t) => (
-            <span>{t.typedChar}</span>
-          ))}
-        </div>
-      )} */}
+      <button
+        type="button"
+        onClick={() => setIsKeyboardActive(!isKeyboardActive)}
+      >
+        Toggle
+      </button>
     </div>
   );
 }

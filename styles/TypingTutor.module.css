@@ -1,3 +1,4 @@
+
 .emptyLetter {
     color: gray;
 }
@@ -28,5 +29,7 @@
 
 .typingInputContainer {
     font-family: 'Roboto Mono', monospace;
-
+    border: solid 1px black;
+    padding: 1rem;
+    border-radius: 5px;
 }
