@@ -37,8 +37,14 @@ export default function Index() {
     keys to the keyDownKeys array while the key is being held down. It
     does NOT actually set the typedChar - that is handled by the keypress event
     listener which is keyboardListener().
+
+    TODO: shift bug:
+    There is a problem: If you type shift + a letter key, they will be added to the array.
+    If you release the letter key first it will work fine. If you release shift first
+    then the capitalized letter will stay in the array until it is typed again.
   */
   const keydownListener = useCallback((e: KeyboardEvent) => {
+    console.log(e.key);
     if (e.key === "Backspace") {
       setTypedChar({ key: e.key });
     } else {

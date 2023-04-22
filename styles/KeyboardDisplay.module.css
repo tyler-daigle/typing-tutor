@@ -18,6 +18,12 @@
     justify-content: center;
 }
 
+/* Space bar */
+.spacebar {
+    width: auto;
+    grid-column: 4/9;
+    border: solid 1px black;
+}
 .selectedKey {
     background-color: red;
     color: white;
