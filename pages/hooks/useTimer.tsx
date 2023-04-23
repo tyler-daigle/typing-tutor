@@ -4,13 +4,14 @@ import { TimerStatus } from "../types/types";
 // Need the global variables so that the setInterval() callback can
 // access them.
 
-let currentTimerStatus: TimerStatus = "stopped";
+// let currentTimerStatus: TimerStatus = "stopped";
 // let lastUpdate = Date.now();
 
 export default function useTimer(duration: number) {
   const [currentTime, setCurrentTime] = useState(0);
   const [timerStatus, setTimerStatus] = useState<TimerStatus>("stopped");
   const lastUpdate = useRef(Date.now());
+  const currentTimerStatus = useRef<TimerStatus>("stopped");
 
   // timerCurrentTime is used to keep track of the current time and is
   // captured by the setInterval() callback. Then it is used to update
@@ -24,19 +25,19 @@ export default function useTimer(duration: number) {
     // start the timer
     console.log("starting timer");
     setTimerStatus("running");
-    currentTimerStatus = "running";
+    currentTimerStatus.current = "running";
     lastUpdate.current = Date.now();
   };
 
   const pauseTimer = () => {
     // pause the timer
     setTimerStatus("paused");
-    currentTimerStatus = "paused";
+    currentTimerStatus.current = "paused";
   };
 
   const runTimer = () => {
     const timerId = setInterval(() => {
-      if (currentTimerStatus !== "running") {
+      if (currentTimerStatus.current !== "running") {
         return;
       }
       const now = Date.now();
