@@ -5,6 +5,7 @@ import { KeyboardDisplay } from "./components/KeyboardDisplay";
 
 import styles from "../styles/Home.module.css";
 import TypingStats from "./components/TypingStats";
+import useTimer from "./hooks/useTimer";
 
 function createCharData(text: string): CharData[] {
   const charData: CharData[] = [];
@@ -124,7 +125,7 @@ export default function Index() {
     setTextData(td);
   }, [typedChar]);
 
-  console.log(keyDownKeys);
+  const { currentTime } = useTimer(5);
   return (
     <div className={styles.mainContainer}>
       <h1>Typing Tutor!</h1>
@@ -137,6 +138,7 @@ export default function Index() {
       >
         Toggle
       </button>
+      <p>{currentTime}</p>
     </div>
   );
 }
