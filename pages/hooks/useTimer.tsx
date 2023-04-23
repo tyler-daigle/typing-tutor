@@ -1,15 +1,16 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { TimerStatus } from "../types/types";
 
 // Need the global variables so that the setInterval() callback can
 // access them.
 
 let currentTimerStatus: TimerStatus = "stopped";
-let lastUpdate = Date.now();
+// let lastUpdate = Date.now();
 
 export default function useTimer(duration: number) {
   const [currentTime, setCurrentTime] = useState(0);
   const [timerStatus, setTimerStatus] = useState<TimerStatus>("stopped");
+  const lastUpdate = useRef(Date.now());
 
   // timerCurrentTime is used to keep track of the current time and is
   // captured by the setInterval() callback. Then it is used to update
@@ -24,7 +25,7 @@ export default function useTimer(duration: number) {
     console.log("starting timer");
     setTimerStatus("running");
     currentTimerStatus = "running";
-    lastUpdate = Date.now();
+    lastUpdate.current = Date.now();
   };
 
   const pauseTimer = () => {
@@ -39,9 +40,9 @@ export default function useTimer(duration: number) {
         return;
       }
       const now = Date.now();
-      const timeSinceLast = now - lastUpdate;
+      const timeSinceLast = now - lastUpdate.current;
       if (timeSinceLast >= 1000) {
-        lastUpdate = now;
+        lastUpdate.current = now;
         if (timerCurrentTime < duration) {
           timerCurrentTime += Math.floor(timeSinceLast / 1000);
           setCurrentTime(timerCurrentTime);

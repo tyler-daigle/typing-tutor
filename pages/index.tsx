@@ -5,6 +5,7 @@ import { KeyboardDisplay } from "./components/KeyboardDisplay";
 
 import styles from "../styles/Home.module.css";
 import TypingStats from "./components/TypingStats";
+// import useTimer from "./hooks/useTimer";
 import useTimer from "./hooks/useTimer";
 
 function createCharData(text: string): CharData[] {
