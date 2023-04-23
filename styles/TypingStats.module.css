@@ -1,0 +1,9 @@
+.typingStatsContainer {
+    border: solid 1px black;
+}
+
+.typingStatsItem {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem;
+}

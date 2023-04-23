@@ -1,9 +1,10 @@
 import { useState, useEffect, useCallback } from "react";
-import { CharData } from "./types/types";
+import { CharData, UserStats } from "./types/types";
 import { TypingTutorText } from "./components/TypingTutor";
 import { KeyboardDisplay } from "./components/KeyboardDisplay";
 
 import styles from "../styles/Home.module.css";
+import TypingStats from "./components/TypingStats";
 
 function createCharData(text: string): CharData[] {
   const charData: CharData[] = [];
@@ -23,6 +24,7 @@ export default function Index() {
   const [charIndex, setCharIndex] = useState(0);
   const [isKeyboardActive, setIsKeyboardActive] = useState(true);
   const [keyDownKeys, setKeyDownKeys] = useState<string[]>([]);
+  const userStats: UserStats = { totalWords: 10, correctWords: 7, wpm: 30 };
 
   // there are two listeners for keypresses because 'keypress' event doesn't catch backspace.
   // using keypress event also ignores other keypresses, such as arrow keys.
@@ -128,6 +130,7 @@ export default function Index() {
       <h1>Typing Tutor!</h1>
       <TypingTutorText cursorPos={charIndex} textData={textData} />
       <KeyboardDisplay keys={keyDownKeys} />
+      <TypingStats stats={userStats} />
       <button
         type="button"
         onClick={() => setIsKeyboardActive(!isKeyboardActive)}
