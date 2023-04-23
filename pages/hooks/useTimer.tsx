@@ -1,6 +1,12 @@
-import { useState, useCallback, useEffect } from "react";
+import { useState, useMemo, useEffect } from "react";
 
 type TimerStatus = "running" | "paused" | "stopped";
+
+// Need the global variables so that the setInterval() callback can
+// access them.
+
+let currentTimerStatus: TimerStatus = "stopped";
+let lastUpdate = Date.now();
 
 export default function useTimer(duration: number) {
   const [currentTime, setCurrentTime] = useState(0);
@@ -14,30 +20,34 @@ export default function useTimer(duration: number) {
 
   let timerCurrentTime = currentTime;
 
-  const startTimer = useCallback(() => {
+  const startTimer = () => {
     // start the timer
-  }, []);
+    console.log("starting timer");
+    setTimerStatus("running");
+    currentTimerStatus = "running";
+    lastUpdate = Date.now();
+  };
 
-  const pauseTimer = useCallback(() => {
+  const pauseTimer = () => {
     // pause the timer
-  }, []);
+    setTimerStatus("paused");
+    currentTimerStatus = "paused";
+  };
 
   const runTimer = () => {
-    let lastUpdate = Date.now();
-
     const timerId = setInterval(() => {
-      console.log("tick");
+      if (currentTimerStatus !== "running") {
+        return;
+      }
       const now = Date.now();
       const timeSinceLast = now - lastUpdate;
       if (timeSinceLast >= 1000) {
         lastUpdate = now;
         if (timerCurrentTime < duration) {
-          console.log(duration, timerCurrentTime);
           timerCurrentTime += Math.floor(timeSinceLast / 1000);
-          // setCurrentTime((time) => Math.floor(time + timeSinceLast / 1000));
           setCurrentTime(timerCurrentTime);
         } else {
-          console.log("Clearing timer");
+          setTimerStatus("stopped");
           clearInterval(timerId);
         }
       }

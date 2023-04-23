@@ -125,18 +125,18 @@ export default function Index() {
     setTextData(td);
   }, [typedChar]);
 
-  const { currentTime } = useTimer(5);
+  const { currentTime, startTimer, pauseTimer } = useTimer(5);
   return (
     <div className={styles.mainContainer}>
       <h1>Typing Tutor!</h1>
       <TypingTutorText cursorPos={charIndex} textData={textData} />
       <KeyboardDisplay keys={keyDownKeys} />
       <TypingStats stats={userStats} />
-      <button
-        type="button"
-        onClick={() => setIsKeyboardActive(!isKeyboardActive)}
-      >
-        Toggle
+      <button type="button" onClick={() => startTimer()}>
+        Start Timer
+      </button>
+      <button type="button" onClick={() => pauseTimer()}>
+        Pause Timer
       </button>
       <p>{currentTime}</p>
     </div>
