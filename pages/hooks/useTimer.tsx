@@ -1,6 +1,5 @@
-import { useState, useMemo, useEffect } from "react";
-
-type TimerStatus = "running" | "paused" | "stopped";
+import { useState, useEffect } from "react";
+import { TimerStatus } from "../types/types";
 
 // Need the global variables so that the setInterval() callback can
 // access them.

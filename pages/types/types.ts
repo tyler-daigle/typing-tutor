@@ -8,3 +8,5 @@ export interface UserStats {
   correctWords: number;
   wpm: number;
 }
+
+export type TimerStatus = "running" | "paused" | "stopped";
