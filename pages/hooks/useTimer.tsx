@@ -1,12 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { TimerStatus } from "../types/types";
 
-// Need the global variables so that the setInterval() callback can
-// access them.
-
-// let currentTimerStatus: TimerStatus = "stopped";
-// let lastUpdate = Date.now();
-
 export default function useTimer(duration: number) {
   const [currentTime, setCurrentTime] = useState(0);
   const [timerStatus, setTimerStatus] = useState<TimerStatus>("stopped");
@@ -18,7 +12,7 @@ export default function useTimer(duration: number) {
   // the react state variable currentTime. It won't work otherwise
   // because the setInterval() handler will create a closure around
   // the currentTime variable and it will always be 0.
-
+  // It is just the number of seconds that have passed.
   let timerCurrentTime = currentTime;
 
   const startTimer = () => {

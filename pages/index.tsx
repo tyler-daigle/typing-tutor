@@ -7,6 +7,7 @@ import styles from "../styles/Home.module.css";
 import TypingStats from "./components/TypingStats";
 // import useTimer from "./hooks/useTimer";
 import useTimer from "./hooks/useTimer";
+import TypingTimer from "./components/TypingTimer";
 
 function createCharData(text: string): CharData[] {
   const charData: CharData[] = [];
@@ -20,6 +21,9 @@ function createCharData(text: string): CharData[] {
 }
 
 export default function Index() {
+  // TODO: move a lot of this state into the other components. To stop everything
+  // from rerendering so much.
+
   const currentText = "This is some random text that you have to type.";
   const [textData, setTextData] = useState<CharData[]>([]);
   const [typedChar, setTypedChar] = useState({ key: "" });
@@ -126,20 +130,13 @@ export default function Index() {
     setTextData(td);
   }, [typedChar]);
 
-  const { currentTime, startTimer, pauseTimer } = useTimer(5);
   return (
     <div className={styles.mainContainer}>
       <h1>Typing Tutor!</h1>
       <TypingTutorText cursorPos={charIndex} textData={textData} />
       <KeyboardDisplay keys={keyDownKeys} />
       <TypingStats stats={userStats} />
-      <button type="button" onClick={() => startTimer()}>
-        Start Timer
-      </button>
-      <button type="button" onClick={() => pauseTimer()}>
-        Pause Timer
-      </button>
-      <p>{currentTime}</p>
+      <TypingTimer />
     </div>
   );
 }

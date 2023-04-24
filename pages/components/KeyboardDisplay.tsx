@@ -11,7 +11,6 @@ export function KeyboardDisplay({ keys }: Props) {
   const qwerty = "_qwertyuiop__asdfghjkl____zxcvbnm___________".split("");
   const spacebarPosition = 39; // 40th key is the spacebar
 
-  // TODO: Add the spacebar
   return (
     <div className={styles.keyboardDisplayContainer}>
       {qwerty.map((key, index) => {
