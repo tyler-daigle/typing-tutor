@@ -1,5 +1,6 @@
 import useTimer from "../hooks/useTimer";
 
+// TODO: add onStop(), onPause() and onDone() callbacks
 export default function TypingTimer() {
   const { currentTime, startTimer, pauseTimer, timerStatus } = useTimer(10);
 
