@@ -1,7 +1,8 @@
 import { useState, useEffect, useCallback } from "react";
-import { CharData, UserStats } from "./types/types";
+import { CharData, TypedWord, UserStats } from "./types/types";
 import { TypingTutorText } from "./components/TypingTutor";
 import { KeyboardDisplay } from "./components/KeyboardDisplay";
+import { checkForWord } from "./util";
 
 import styles from "../styles/Home.module.css";
 import TypingStats from "./components/TypingStats";
@@ -19,11 +20,12 @@ function createCharData(text: string): CharData[] {
 }
 
 export default function Index() {
-  const currentText = "This is some random text that you have to type.";
+  const currentText = "This is some text";
   const [textData, setTextData] = useState<CharData[]>([]);
   const [typedChar, setTypedChar] = useState({ key: "" });
   const [charIndex, setCharIndex] = useState(0);
   const [isKeyboardActive, setIsKeyboardActive] = useState(true);
+  const [correctWords, setCorrectWords] = useState<TypedWord[]>([]);
 
   // keyDownKeys is an array of keys that are currently being held down
   const [keyDownKeys, setKeyDownKeys] = useState<string[]>([]);
@@ -84,6 +86,23 @@ export default function Index() {
     window.removeEventListener("keyup", keyupListener);
   };
 
+  // checkLastWord() is called when backspace is pressed and we might have
+  // to remove a previously correct word from the array. It checks if the
+  // current position of the cursor is inside the last correct word.
+  const checkLastWord = () => {
+    if (correctWords.length === 0) {
+      return;
+    }
+
+    const lastWord = correctWords[correctWords.length - 1];
+    if (lastWord && lastWord.endOfWord >= charIndex) {
+      // correctWords.pop();
+      setCorrectWords((words) => words.slice(0, words.length - 1));
+      console.log("removing last correct word");
+    }
+    console.log(correctWords);
+  };
+
   useEffect(() => {
     const td = createCharData(currentText);
     setTextData(td);
@@ -104,8 +123,21 @@ export default function Index() {
   }, [isKeyboardActive]);
 
   useEffect(() => {
-    // check for end of the text
-    if (charIndex === currentText.length && typedChar.key !== "Backspace") {
+    // this is called after a key is pressed, so charIndex will actually be about to be moved
+    // to the next space.
+
+    // TODO: move the checking of the words to a separate useEffect()
+
+    // check for end of the text - charIndex will be one past the end of the text
+    if (charIndex === currentText.length - 1 && typedChar.key !== "Backspace") {
+      console.log(`Done on ${charIndex} with length ${currentText.length}`);
+
+      const foundWord = checkForWord(currentText, textData, charIndex);
+      if (foundWord) {
+        console.log(foundWord);
+        correctWords.push(foundWord);
+      }
+
       return;
     }
 
@@ -113,6 +145,20 @@ export default function Index() {
 
     if (textData.length === 0) {
       return;
+    }
+
+    console.log(charIndex, currentText.length);
+    // check for correct words everytime a space is typed or at the end of the text
+    if (typedChar.key === " ") {
+      const foundWord = checkForWord(currentText, textData, charIndex);
+      if (foundWord) {
+        console.log(foundWord);
+        correctWords.push(foundWord);
+      }
+    }
+
+    if (typedChar.key === "Backspace" || typedChar.key === ".") {
+      checkLastWord();
     }
 
     // handle backspace by deleting the previous character
@@ -134,7 +180,7 @@ export default function Index() {
       <h1>Typing Tutor!</h1>
       <TypingTutorText cursorPos={charIndex} textData={textData} />
       <KeyboardDisplay keys={keyDownKeys} />
-      <TypingStats stats={userStats} />
+      <TypingStats stats={userStats} correctWordCount={correctWords.length} />
       <TypingTimer />
     </div>
   );

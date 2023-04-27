@@ -3,9 +3,10 @@ import { UserStats } from "../types/types";
 
 interface Props {
   stats: UserStats;
+  correctWordCount: number;
 }
 
-export default function TypingStats({ stats }: Props) {
+export default function TypingStats({ stats, correctWordCount }: Props) {
   const { totalWords, correctWords, wpm } = stats;
 
   return (
@@ -17,7 +18,7 @@ export default function TypingStats({ stats }: Props) {
       </div>
       <div className={styles.typingStatsItem}>
         <span className={styles.typingStatsLabel}>Correct Words</span>
-        <span className={styles.typingStatsValue}>{correctWords}</span>
+        <span className={styles.typingStatsValue}>{correctWordCount}</span>
       </div>
       <div className={styles.typingStatsItem}>
         <span className={styles.typingStatsLabel}>WPM</span>

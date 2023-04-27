@@ -10,3 +10,9 @@ export interface UserStats {
 }
 
 export type TimerStatus = "running" | "paused" | "stopped";
+
+export interface TypedWord {
+  startOfWord: number;
+  endOfWord: number;
+  word: string;
+};
