@@ -5,8 +5,6 @@ import { KeyboardDisplay } from "./components/KeyboardDisplay";
 
 import styles from "../styles/Home.module.css";
 import TypingStats from "./components/TypingStats";
-// import useTimer from "./hooks/useTimer";
-import useTimer from "./hooks/useTimer";
 import TypingTimer from "./components/TypingTimer";
 
 function createCharData(text: string): CharData[] {
@@ -21,15 +19,15 @@ function createCharData(text: string): CharData[] {
 }
 
 export default function Index() {
-  // TODO: move a lot of this state into the other components. To stop everything
-  // from rerendering so much.
-
   const currentText = "This is some random text that you have to type.";
   const [textData, setTextData] = useState<CharData[]>([]);
   const [typedChar, setTypedChar] = useState({ key: "" });
   const [charIndex, setCharIndex] = useState(0);
   const [isKeyboardActive, setIsKeyboardActive] = useState(true);
+
+  // keyDownKeys is an array of keys that are currently being held down
   const [keyDownKeys, setKeyDownKeys] = useState<string[]>([]);
+
   const userStats: UserStats = { totalWords: 10, correctWords: 7, wpm: 30 };
 
   // there are two listeners for keypresses because 'keypress' event doesn't catch backspace.
@@ -52,7 +50,6 @@ export default function Index() {
     then the capitalized letter will stay in the array until it is typed again.
   */
   const keydownListener = useCallback((e: KeyboardEvent) => {
-    console.log(e.key);
     if (e.key === "Backspace") {
       setTypedChar({ key: e.key });
     } else {
@@ -67,11 +64,11 @@ export default function Index() {
   }, []);
 
   /*
+    keyupListener()
     keyup event handler for when a key is released - it will be removed from
     the array.
   */
   const keyupListener = useCallback((e: KeyboardEvent) => {
-    //remove the key from the array
     setKeyDownKeys((keys) => keys.filter((key) => key !== e.key));
   }, []);
 
@@ -108,7 +105,7 @@ export default function Index() {
 
   useEffect(() => {
     // check for end of the text
-    if (charIndex === currentText.length - 1 && typedChar.key !== "Backspace") {
+    if (charIndex === currentText.length && typedChar.key !== "Backspace") {
       return;
     }
 
@@ -118,11 +115,13 @@ export default function Index() {
       return;
     }
 
-    if (typedChar.key === "Backspace" && charIndex > 0) {
-      td[charIndex - 1].typedChar = "";
-      if (charIndex > 0) {
-        setCharIndex(charIndex - 1);
-      }
+    // handle backspace by deleting the previous character
+    if (typedChar.key === "Backspace" && charIndex >= 0) {
+      // remove the first character but don't go below 0
+      const tempIndex = charIndex > 0 ? charIndex - 1 : 0;
+
+      td[tempIndex].typedChar = "";
+      setCharIndex(tempIndex);
     } else {
       td[charIndex].typedChar = typedChar.key;
       setCharIndex(charIndex + 1);
