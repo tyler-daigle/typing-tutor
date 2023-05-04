@@ -20,7 +20,7 @@ export default function Index() {
         expectedText={currentText}
         onChange={(s) => setTypedText(s)}
       />
-      <KeyboardDisplay keys={keyDownKeys} />
+      <KeyboardDisplay disabled={false} />
       {/* <TypingStats stats={userStats} /> */}
       <TypingTimer />
     </div>
