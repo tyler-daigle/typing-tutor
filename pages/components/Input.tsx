@@ -68,10 +68,14 @@ export default function Input({
     onChange(value + e.key);
   };
 
+  const inputClassName = `${styles.customInput} ${
+    hasFocus ? styles.hasFocus : styles.blur
+  }`;
+
   return (
     <div className={styles.inputContainer}>
       <div
-        className={hasFocus ? styles.hasFocus : styles.blur}
+        className={inputClassName}
         tabIndex={0}
         onFocus={() => setHasFocus(true)}
         onBlur={() => setHasFocus(false)}

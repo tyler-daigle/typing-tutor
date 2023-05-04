@@ -1,41 +1,70 @@
 .inputContainer {
   cursor: text;
+  --cursor-bg-color: lightgray;
+  --cursor-fg-color: black;
+
+  --input-bg-color-focus: lightgray;
+  --input-bg-color-blur: white;
+
+  --expected-color: gray;
+  --correct-color: black;
+  --wrong-color: red;
+
+  --input-border-radius: 5px;
+  --input-border-size: 1px;
+  --input-border-color: black;
+  --input-border-color-focus: black;
+  --input-border-color-blur: gray;
+
+  --padding-size: 1rem;
+
 }
+.customInput {
+  padding: var(--padding-size);
+  margin: var(--padding-size);;
+  font-size: 1.25rem;
+  border: solid var(--input-border-size) var(--input-border-color); 
+  border-radius: var(--input-border-radius);
+
+}
+
 .expectedChar {
-  color: gray;
+  color: var(--expected-color);
 }
 
 .correctChar {
   font-weight: bold;
-  filter: brightness(1.250);
+  color: var(--correct-color);
 }
 
 .wrongChar {
-  color: red;
+  color: var(--wrong-color);
 }
 
 .hasFocus {
-  border: solid 1px black;
+  border: solid var(--input-border-size) var(--input-border-color-focus); 
+  background-color: var(--input-bg-color-focus);
 }
 
 .blur {
-  border: solid 1px gray;
+  border: solid var(--input-border-size) var(--input-border-color-blur); 
+  background-color: var(--input-bg-color-blur);
 }
 
 .cursor {
-  background-color: black;
-  color: white;
+  background-color: var(--cursor-bg-color);
+  color: var(--cursor-fg-color);
   animation: blinkingCursor 900ms infinite steps(2, jump-none);
 }
 
 @keyframes blinkingCursor {
   from {
-      background-color: black;
-      color: white;
+      background-color: var(--cursor-fg-color);
+      color: var(--cursor-bg-color);
+  }
+  to {
+      background-color: var(--cursor-bg-color);
+      color: var(--cursor-fg-color);
   }
 
-  to {
-      background-color: white;
-      color: black;
-  }
 }
