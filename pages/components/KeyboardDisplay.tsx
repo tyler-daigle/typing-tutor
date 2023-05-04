@@ -1,20 +1,20 @@
 import styles from "../../styles/KeyboardDisplay.module.css";
 interface Props {
   disabled: false;
+  highlightCharacter?: string;
 }
 import { useState, useEffect } from "react";
 import useKeyboard from "../hooks/useKeyboard";
 
-export function KeyboardDisplay({ disabled }: Props) {
+export function KeyboardDisplay({ disabled, highlightCharacter }: Props) {
   // the keyboard string has an extra 7 characters in the last row - 3 padding
   // on each side and 1 in the middle for the spacebar which is set to span
   // multiple rows with the grid style.
 
-  const qwerty = "_qwertyuiop__asdfghjkl____zxcvbnm___________".split("");
+  const qwerty = "_qwertyuiop__asdfghjkl;'__zxcvbnm,./________".split("");
   const spacebarPosition = 39; // 40th key is the spacebar
 
   const { pressedKeys } = useKeyboard();
-  console.log(`Keys: ${pressedKeys}`);
   // highlight each key that is in the pressedKeys array by
   // changing the style. A special case is used for the space
   // because it needs to be styled differently.
@@ -35,7 +35,9 @@ export function KeyboardDisplay({ disabled }: Props) {
             return (
               <span
                 key={elementKey}
-                className={`${styles.key} ${styles.spacebar}`}
+                className={` ${
+                  highlightCharacter === " " && styles.highlightKey
+                } ${styles.key} ${styles.spacebar}`}
               ></span>
             );
           }
@@ -61,7 +63,12 @@ export function KeyboardDisplay({ disabled }: Props) {
         } else {
           // a regular key that isn't being pressed
           return (
-            <span key={elementKey} className={styles.key}>
+            <span
+              key={elementKey}
+              className={`${styles.key} ${
+                highlightCharacter === keyboardKey && styles.highlightKey
+              }`}
+            >
               {keyboardKey}
             </span>
           );
