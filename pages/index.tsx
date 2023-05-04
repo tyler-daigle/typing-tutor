@@ -6,7 +6,8 @@ import TypingStats from "./components/TypingStats";
 import TypingTimer from "./components/TypingTimer";
 
 export default function Index() {
-  const currentText = "This is some random text that you have to type. ";
+  const currentText =
+    "This is some random text <h1>Hello</h1> that you have to type. ";
   const [typedText, setTypedText] = useState<string>("");
   const [isKeyboardActive, setIsKeyboardActive] = useState(true);
   const [keyDownKeys, setKeyDownKeys] = useState<string[]>([]);

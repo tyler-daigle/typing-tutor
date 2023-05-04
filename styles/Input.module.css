@@ -1,5 +1,4 @@
 .inputContainer {
-  font-family: monospace;
   cursor: text;
 }
 .expectedChar {
@@ -7,7 +6,8 @@
 }
 
 .correctChar {
-  color: black;
+  font-weight: bold;
+  filter: brightness(1.250);
 }
 
 .wrongChar {

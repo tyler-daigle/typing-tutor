@@ -15,7 +15,6 @@ export default function Input({
   disabled,
 }: Props) {
   const [hasFocus, setHasFocus] = useState(false);
-
   const cursorClass = hasFocus && !disabled ? styles.cursor : "";
 
   // split the text up into correct, wrong, and not yet typed characters
@@ -23,13 +22,22 @@ export default function Input({
     if (index < value.length) {
       // if a character was typed at this position
       if (value.charAt(index) === char) {
-        return <span className={styles.correctChar}>{char}</span>;
+        return (
+          <span key={`${index}-correct`} className={styles.correctChar}>
+            {char}
+          </span>
+        );
       } else {
-        return <span className={styles.wrongChar}>{char}</span>;
+        return (
+          <span key={`${index}-wrong`} className={styles.wrongChar}>
+            {char}
+          </span>
+        );
       }
     } else {
       return (
         <span
+          key={`${index}-expected`}
           className={`${styles.expectedChar} ${
             value.length === index && cursorClass
           }`}
@@ -40,7 +48,8 @@ export default function Input({
     }
   });
 
-  const handleKeyPress = (e: React.KeyboardEvent) => {
+  // Handler for the onKeyDown event of the div.
+  const handleKeyEvent = (e: React.KeyboardEvent) => {
     const ignoreKeys = ["Shift", "Control", "Meta", "Alt"];
     if (disabled) return;
 
@@ -66,7 +75,7 @@ export default function Input({
         tabIndex={0}
         onFocus={() => setHasFocus(true)}
         onBlur={() => setHasFocus(false)}
-        onKeyDown={handleKeyPress}
+        onKeyDown={handleKeyEvent}
       >
         {textOutput}
       </div>
