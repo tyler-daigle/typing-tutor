@@ -16,6 +16,8 @@ export default function Input({
 }: Props) {
   const [hasFocus, setHasFocus] = useState(false);
 
+  const cursorClass = hasFocus && !disabled ? styles.cursor : "";
+
   // split the text up into correct, wrong, and not yet typed characters
   const textOutput = expectedText.split("").map((char, index) => {
     if (index < value.length) {
@@ -26,15 +28,10 @@ export default function Input({
         return <span className={styles.wrongChar}>{char}</span>;
       }
     } else {
-      // place the cursor just after the last typed character
-      // index will be === length of the typed string (since
-      // index starts at 0)
-      const lastChar = index === value.length;
-
       return (
         <span
           className={`${styles.expectedChar} ${
-            lastChar && !disabled ? styles.cursor : ""
+            value.length === index && cursorClass
           }`}
         >
           {char}
