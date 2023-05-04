@@ -2,7 +2,8 @@ import styles from "../../styles/KeyboardDisplay.module.css";
 interface Props {
   disabled: false;
 }
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import useKeyboard from "../hooks/useKeyboard";
 
 export function KeyboardDisplay({ disabled }: Props) {
   // the keyboard string has an extra 7 characters in the last row - 3 padding
@@ -12,8 +13,8 @@ export function KeyboardDisplay({ disabled }: Props) {
   const qwerty = "_qwertyuiop__asdfghjkl____zxcvbnm___________".split("");
   const spacebarPosition = 39; // 40th key is the spacebar
 
-  const [pressedKeys, setPressedKeys] = useState<string[]>([]);
-
+  const { pressedKeys } = useKeyboard();
+  console.log(`Keys: ${pressedKeys}`);
   // highlight each key that is in the pressedKeys array by
   // changing the style. A special case is used for the space
   // because it needs to be styled differently.
