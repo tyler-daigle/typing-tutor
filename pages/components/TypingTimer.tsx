@@ -4,14 +4,17 @@ import { useEffect } from "react";
 interface Props {
   onDone: () => void;
   running: boolean;
+  duration: number;
 }
 
 // TODO: add onStop(), onPause() and onDone() callbacks
-export default function TypingTimer({ onDone, running }: Props) {
-  const { currentTime, startTimer, pauseTimer, timerStatus } = useTimer(10);
+export default function TypingTimer({ onDone, running, duration }: Props) {
+  const { currentTime, startTimer, pauseTimer, timerStatus } =
+    useTimer(duration);
 
   useEffect(() => {
-    if (timerStatus === "stopped") {
+    console.log("Timer status changed");
+    if (timerStatus === "stopped" && duration - currentTime === 0) {
       onDone();
     }
   }, [timerStatus]);
@@ -33,7 +36,7 @@ export default function TypingTimer({ onDone, running }: Props) {
 
   return (
     <div>
-      <p>Timer: {currentTime}</p>
+      <p>Timer: {duration - currentTime}</p>
       <p>Timer status: {timerStatus}</p>
     </div>
   );

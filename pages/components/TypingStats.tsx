@@ -1,27 +1,51 @@
 import styles from "../../styles/TypingStats.module.css";
-import { UserStats } from "../types/types";
 
 interface Props {
-  stats: UserStats;
+  correctText: string;
+  userText: string;
 }
 
-export default function TypingStats({ stats }: Props) {
-  const { totalWords, correctWords, wpm } = stats;
+export default function TypingStats({ correctText, userText }: Props) {
+  // count the number of correct characters typed
+
+  //TODO: Count the number of words and the calculate WPM.
+
+  const totalCharactersTyped = userText.length;
+  let correctCharactersTyped = 0;
+  let accuracyPercentage = 0;
+
+  if (totalCharactersTyped > correctText.length) {
+    throw new Error("More characters were typed than actually exist...");
+  }
+
+  for (let i = 0; i < totalCharactersTyped; i++) {
+    if (userText.charAt(i) === correctText.charAt(i)) {
+      correctCharactersTyped += 1;
+    }
+  }
+
+  accuracyPercentage =
+    totalCharactersTyped > 0
+      ? Math.floor((correctCharactersTyped / totalCharactersTyped) * 100)
+      : 0;
 
   return (
     <div className={styles.typingStatsContainer}>
-      <h3>Stats</h3>
       <div className={styles.typingStatsItem}>
-        <span className={styles.typingStatsLabel}>Total Words</span>
-        <span className={styles.typingStatsValue}>{totalWords}</span>
+        <span>
+          Total Characters Typed: <em>{totalCharactersTyped}</em>
+        </span>
       </div>
       <div className={styles.typingStatsItem}>
-        <span className={styles.typingStatsLabel}>Correct Words</span>
-        <span className={styles.typingStatsValue}>{correctWords}</span>
+        <span className="">
+          Correct Characters Typed: <em>{correctCharactersTyped}</em>
+        </span>
       </div>
+
       <div className={styles.typingStatsItem}>
-        <span className={styles.typingStatsLabel}>WPM</span>
-        <span className={styles.typingStatsValue}>{wpm}</span>
+        <span className="">
+          Accuracy: <em>{accuracyPercentage}%</em>
+        </span>
       </div>
     </div>
   );
