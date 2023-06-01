@@ -2,6 +2,8 @@ interface Props {
   value: string;
   expectedText: string;
   onChange: (text: string) => void;
+  onFocus?: () => void;
+  onBlur?: () => void;
   disabled?: boolean;
 }
 
@@ -12,6 +14,8 @@ export default function Input({
   value,
   expectedText,
   onChange,
+  onFocus,
+  onBlur,
   disabled,
 }: Props) {
   const [hasFocus, setHasFocus] = useState(false);
@@ -72,13 +76,27 @@ export default function Input({
     hasFocus ? styles.hasFocus : styles.blur
   }`;
 
+  const gotFocus = () => {
+    setHasFocus(true);
+    if (onFocus) {
+      onFocus();
+    }
+  };
+
+  const lostFocus = () => {
+    setHasFocus(false);
+    if (onBlur) {
+      onBlur();
+    }
+  };
+
   return (
     <div className={styles.inputContainer}>
       <div
         className={inputClassName}
         tabIndex={0}
-        onFocus={() => setHasFocus(true)}
-        onBlur={() => setHasFocus(false)}
+        onFocus={gotFocus}
+        onBlur={lostFocus}
         onKeyDown={handleKeyEvent}
       >
         {textOutput}

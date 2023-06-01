@@ -10,6 +10,19 @@ export default function Index() {
     "The quick brown fox jumps over the lazy dog. This sentence contains all the letters of the English alphabet. However, some letters appear more frequently than others. For example, the letter 'e' is the most commonly used letter in English, while the letters 'q', 'x', and 'z' are relatively rare. Learning to type efficiently requires practice, but it can greatly improve your productivity and reduce the risk of repetitive strain injuries.";
   const [typedText, setTypedText] = useState<string>("");
   const nextChar = currentText.charAt(typedText.length).toLowerCase();
+  const [timerRunning, setTimerRunning] = useState(false);
+  const [inputDisabled, setInputDisabled] = useState(true);
+
+  // use this as the key to force a remount of the <TypingTimer> to reset the timer
+  const [timerId, setTimerId] = useState(1);
+
+  const inputGotFocus = () => {
+    if (inputDisabled) {
+      console.log("Game is starting");
+      setInputDisabled(false);
+      setTimerRunning(true);
+    }
+  };
 
   return (
     <div className={styles.mainContainer}>
@@ -18,10 +31,17 @@ export default function Index() {
         value={typedText}
         expectedText={currentText}
         onChange={(s) => setTypedText(s)}
+        onFocus={() => inputGotFocus()}
+        disabled={inputDisabled}
       />
       <KeyboardDisplay disabled={false} highlightCharacter={nextChar} />
       {/* <TypingStats stats={userStats} /> */}
-      <TypingTimer />
+      <TypingTimer
+        key={timerId}
+        running={timerRunning}
+        onDone={() => console.log("Timer Done")}
+      />
+      <button onClick={() => setTimerId(timerId + 1)}>Reset Timer</button>
     </div>
   );
 }
