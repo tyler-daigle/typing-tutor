@@ -1,0 +1,8 @@
+.timerContainer {
+  width: 100%;
+  text-align: center;
+}
+
+.timerTime {
+  font-size: 3rem;
+}

@@ -1,5 +1,6 @@
 import useTimer from "../hooks/useTimer";
 import { useEffect } from "react";
+import styles from "../../styles/TypingTimer.module.css";
 
 interface Props {
   onDone: () => void;
@@ -45,9 +46,13 @@ export default function TypingTimer({
   }, [running]);
 
   return (
-    <div>
-      <p>Timer: {duration - currentTime}</p>
-      <p>Timer status: {timerStatus}</p>
+    <div className={styles.timerContainer}>
+      {duration - currentTime === 0 ? (
+        <h2>Time's Up!</h2>
+      ) : (
+        <h2>Time Remaining:</h2>
+      )}
+      <span className={styles.timerTime}>{duration - currentTime}s</span>
     </div>
   );
 }

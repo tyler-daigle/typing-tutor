@@ -12,7 +12,7 @@ export default function Index() {
   const nextChar = currentText.charAt(typedText.length).toLowerCase();
   const [timerRunning, setTimerRunning] = useState(false);
   const [inputDisabled, setInputDisabled] = useState(true);
-  const duration = 20;
+  const duration = 60; // seconds
   // use this as the key to force a remount of the <TypingTimer> to reset the timer
   const [timerId, setTimerId] = useState(1);
   const [gameOver, setGameOver] = useState(false);
@@ -41,7 +41,16 @@ export default function Index() {
 
   return (
     <div className={styles.mainContainer}>
-      <h1>Typing Tutor!</h1>
+      <header>
+        <div className={styles.introSection}>
+          <h1>Test Your Typing Skills!</h1>
+          <p>
+            Test your typing skills! The timer will begin as soon as you{" "}
+            <strong>click inside the textbox below</strong>. You will have one
+            minute to type as many words as you can. Accuracy counts!
+          </p>
+        </div>
+      </header>
       <Input
         value={typedText}
         expectedText={currentText}
@@ -49,7 +58,7 @@ export default function Index() {
         onFocus={() => inputGotFocus()}
         disabled={inputDisabled}
       />
-      <KeyboardDisplay disabled={false} highlightCharacter={nextChar} />
+      {/* <KeyboardDisplay disabled={false} highlightCharacter={nextChar} /> */}
 
       <TypingTimer
         key={timerId}
@@ -58,7 +67,7 @@ export default function Index() {
         duration={duration}
         onTick={(n) => setCurrentDuration(n)}
       />
-      <button onClick={resetTimer}>Reset Timer</button>
+      {/* <button onClick={resetTimer}>Reset Timer</button> */}
 
       <TypingStats
         correctText={currentText}

@@ -60,7 +60,7 @@ export default function TypingStats({
           WPM: <em>{wpm}</em>
         </span>
       </div>
-      <div className={styles.typingStatsItem}>
+      {/* <div className={styles.typingStatsItem}>
         <span>
           Total Characters Typed: <em>{totalCharactersTyped}</em>
         </span>
@@ -69,7 +69,7 @@ export default function TypingStats({
         <span className="">
           Correct Characters Typed: <em>{correctCharactersTyped}</em>
         </span>
-      </div>
+      </div> */}
 
       <div className={styles.typingStatsItem}>
         <span className="">
@@ -77,14 +77,14 @@ export default function TypingStats({
         </span>
       </div>
 
-      <div className={styles.typingStatsItem}>
+      {/* <div className={styles.typingStatsItem}>
         <span className="">
           Correct Words:{" "}
           <em>
             {numWordsCorrect} / {correctWords.length}
           </em>
         </span>
-      </div>
+      </div> */}
     </div>
   );
 }
