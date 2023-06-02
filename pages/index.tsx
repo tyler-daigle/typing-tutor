@@ -12,10 +12,11 @@ export default function Index() {
   const nextChar = currentText.charAt(typedText.length).toLowerCase();
   const [timerRunning, setTimerRunning] = useState(false);
   const [inputDisabled, setInputDisabled] = useState(true);
-  const duration = 5;
+  const duration = 20;
   // use this as the key to force a remount of the <TypingTimer> to reset the timer
   const [timerId, setTimerId] = useState(1);
   const [gameOver, setGameOver] = useState(false);
+  const [currentDuration, setCurrentDuration] = useState(0);
 
   const inputGotFocus = () => {
     if (inputDisabled && !gameOver) {
@@ -32,7 +33,7 @@ export default function Index() {
   };
 
   const gameEnding = () => {
-    resetTimer();
+    //resetTimer();
     setInputDisabled(true);
     setGameOver(true);
     console.log("Game over");
@@ -55,10 +56,15 @@ export default function Index() {
         running={timerRunning}
         onDone={gameEnding}
         duration={duration}
+        onTick={(n) => setCurrentDuration(n)}
       />
       <button onClick={resetTimer}>Reset Timer</button>
 
-      <TypingStats correctText={currentText} userText={typedText} />
+      <TypingStats
+        correctText={currentText}
+        userText={typedText}
+        duration={currentDuration}
+      />
     </div>
   );
 }

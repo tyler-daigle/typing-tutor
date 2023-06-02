@@ -3,12 +3,17 @@ import { useEffect } from "react";
 
 interface Props {
   onDone: () => void;
+  onTick: (count: number) => void;
   running: boolean;
   duration: number;
 }
 
-// TODO: add onStop(), onPause() and onDone() callbacks
-export default function TypingTimer({ onDone, running, duration }: Props) {
+export default function TypingTimer({
+  onDone,
+  running,
+  duration,
+  onTick,
+}: Props) {
   const { currentTime, startTimer, pauseTimer, timerStatus } =
     useTimer(duration);
 
@@ -18,6 +23,11 @@ export default function TypingTimer({ onDone, running, duration }: Props) {
       onDone();
     }
   }, [timerStatus]);
+
+  // onTick callback
+  useEffect(() => {
+    onTick(currentTime);
+  }, [currentTime]);
 
   useEffect(() => {
     if (
