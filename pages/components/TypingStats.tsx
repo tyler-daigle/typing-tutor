@@ -1,5 +1,6 @@
 import styles from "../../styles/TypingStats.module.css";
 import { useMemo } from "react";
+import SpeedMeter from "./SpeedMeter";
 
 interface Props {
   correctText: string;
@@ -54,37 +55,21 @@ export default function TypingStats({
   const wpm = duration > 0 ? Math.floor(numWordsCorrect / (duration / 60)) : 0;
 
   return (
-    <div className={styles.typingStatsContainer}>
-      <div className={styles.typingStatsItem}>
-        <span>
-          WPM: <em>{wpm}</em>
-        </span>
-      </div>
-      {/* <div className={styles.typingStatsItem}>
-        <span>
-          Total Characters Typed: <em>{totalCharactersTyped}</em>
-        </span>
-      </div>
-      <div className={styles.typingStatsItem}>
-        <span className="">
-          Correct Characters Typed: <em>{correctCharactersTyped}</em>
-        </span>
-      </div> */}
+    <div>
+      <div className={styles.typingStatsContainer}>
+        <div className={styles.typingStatsItem}>
+          <span>
+            WPM: <em>{wpm}</em>
+          </span>
+        </div>
 
-      <div className={styles.typingStatsItem}>
-        <span className="">
-          Accuracy: <em>{accuracyPercentage}%</em>
-        </span>
+        <div className={styles.typingStatsItem}>
+          <span className="">
+            Accuracy: <em>{accuracyPercentage}%</em>
+          </span>
+        </div>
       </div>
-
-      {/* <div className={styles.typingStatsItem}>
-        <span className="">
-          Correct Words:{" "}
-          <em>
-            {numWordsCorrect} / {correctWords.length}
-          </em>
-        </span>
-      </div> */}
+      <SpeedMeter wpm={wpm} />
     </div>
   );
 }

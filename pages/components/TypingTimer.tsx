@@ -19,7 +19,6 @@ export default function TypingTimer({
     useTimer(duration);
 
   useEffect(() => {
-    console.log("Timer status changed");
     if (timerStatus === "stopped" && duration - currentTime === 0) {
       onDone();
     }
