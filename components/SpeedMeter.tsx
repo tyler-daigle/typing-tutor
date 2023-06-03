@@ -1,4 +1,4 @@
-import style from "../../styles/SpeedMeter.module.css";
+import style from "../styles/SpeedMeter.module.css";
 
 export default function SpeedMeter({ wpm }: { wpm: number }) {
   const maxWpm = 120;
@@ -13,6 +13,9 @@ export default function SpeedMeter({ wpm }: { wpm: number }) {
   ];
 
   const currSpeedMessage = (() => {
+    if (wpm === 0) {
+      return "";
+    }
     if (wpm <= 39) {
       return "Keep Typing...";
     }
@@ -39,7 +42,7 @@ export default function SpeedMeter({ wpm }: { wpm: number }) {
           ></div>
         </div>
       </div>
-      <span className={style.speedMeterMessage}>{currSpeedMessage}</span>
+      {/* <span className={style.speedMeterMessage}>{currSpeedMessage}</span> */}
     </div>
   );
 }

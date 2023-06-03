@@ -17,15 +17,13 @@
   --input-border-color-blur: gray;
 
   --padding-size: 1rem;
-
 }
 .customInput {
+  border: solid var(--input-border-size) var(--input-border-color);
   padding: var(--padding-size);
-  margin: var(--padding-size);;
+  margin: var(--padding-size);
   font-size: 1.25rem;
-  border: solid var(--input-border-size) var(--input-border-color); 
   border-radius: var(--input-border-radius);
-
 }
 
 .expectedChar {
@@ -42,12 +40,12 @@
 }
 
 .hasFocus {
-  border: solid var(--input-border-size) var(--input-border-color-focus); 
+  border: solid var(--input-border-size) var(--input-border-color-focus);
   background-color: var(--input-bg-color-focus);
 }
 
 .blur {
-  border: solid var(--input-border-size) var(--input-border-color-blur); 
+  border: solid var(--input-border-size) var(--input-border-color-blur);
   background-color: var(--input-bg-color-blur);
 }
 
@@ -59,12 +57,11 @@
 
 @keyframes blinkingCursor {
   from {
-      background-color: var(--cursor-fg-color);
-      color: var(--cursor-bg-color);
+    background-color: var(--cursor-fg-color);
+    color: var(--cursor-bg-color);
   }
   to {
-      background-color: var(--cursor-bg-color);
-      color: var(--cursor-fg-color);
+    background-color: var(--cursor-bg-color);
+    color: var(--cursor-fg-color);
   }
-
 }

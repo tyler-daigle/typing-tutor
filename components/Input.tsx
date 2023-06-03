@@ -7,7 +7,7 @@ interface Props {
   disabled?: boolean;
 }
 
-import styles from "../../styles/Input.module.css";
+import styles from "../styles/Input.module.css";
 import { useState } from "react";
 
 export default function Input({
@@ -69,7 +69,13 @@ export default function Input({
     // end of the text has been typed
     if (value.length === expectedText.length) return;
 
-    onChange(value + e.key);
+    if (expectedText[value.length] === " " && e.key !== " ") {
+      // TODO: don't allow characters to replace spaces, it messes up word count
+      // this is actually a bug and a better way to count words is needed.
+      onChange(value + " ");
+    } else {
+      onChange(value + e.key);
+    }
   };
 
   const inputClassName = `${styles.customInput} ${

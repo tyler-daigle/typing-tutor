@@ -1,6 +1,6 @@
 import useTimer from "../hooks/useTimer";
 import { useEffect } from "react";
-import styles from "../../styles/TypingTimer.module.css";
+import styles from "../styles/TypingTimer.module.css";
 
 interface Props {
   onDone: () => void;

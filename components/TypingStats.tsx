@@ -1,4 +1,4 @@
-import styles from "../../styles/TypingStats.module.css";
+import styles from "../styles/TypingStats.module.css";
 import { useMemo } from "react";
 import SpeedMeter from "./SpeedMeter";
 
@@ -42,7 +42,8 @@ export default function TypingStats({
 
   // count the number of words and determine how many were correct
   // remove any words that have a length of 0 which will happen in multiple spaces are inserted.
-  const userWords = userText.split(" ").filter((s) => s.length !== 0);
+  let userWords = userText.split(" ").filter((s) => s.length !== 0);
+
   let numWordsCorrect = 0;
 
   for (let i = 0; i < userWords.length && i < correctWords.length; i++) {
