@@ -14,7 +14,7 @@ export default function Index() {
   const nextChar = currentText.charAt(typedText.length).toLowerCase();
   const [timerRunning, setTimerRunning] = useState(false);
   const [inputDisabled, setInputDisabled] = useState(true);
-  const duration = 30; // seconds
+  const duration = 60; // seconds
   // use this as the key to force a remount of the <TypingTimer> to reset the timer
   const [timerId, setTimerId] = useState(1);
   const [gameOver, setGameOver] = useState(false);
