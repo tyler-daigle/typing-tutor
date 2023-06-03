@@ -45,6 +45,18 @@ export default function Index() {
 
   return (
     <div className={styles.mainContainer}>
+      <div className="no-mobile">
+        <h2>Sorry!</h2>
+        <p>
+          This is a typing test meant for use with a keyboard... Therefore it
+          won't work properly on mobile.
+        </p>
+
+        <p>
+          You can still learn more about it at{" "}
+          <a href="https://github.com/tyler-daigle/typing-tutor">Github</a>!
+        </p>
+      </div>
       <header>
         <div className={styles.introSection}>
           <h1>Test Your Typing Skills!</h1>
