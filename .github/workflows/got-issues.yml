@@ -1,0 +1,64 @@
+name: Got Issues Workflow
+run-name: Running Got Issues Workflow
+on:
+  issues:
+    types:
+      - opened
+      - closed
+
+jobs:
+  add_issue:
+    if: github.event.issue.state == 'open' &&  github.event.issue.author_association == 'OWNER' && contains(github.event.issue.labels.*.name, 'help wanted')
+    runs-on: ubuntu-latest
+
+    env:
+      API_ENDPOINT: "https://gotissues-main.vercel.app/api/addissue"
+
+    steps:
+      - name: Get Languages Used
+        id: languages
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const repo = context.payload.repository.full_name;
+            const response = await github.rest.repos.listLanguages({ owner: context.repo.owner, repo: context.repo.repo });
+            core.setOutput('languages', Object.keys(response.data).join(','));
+
+      - name: Check Issue Labels
+        id: get_difficulty_label
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          debug: true
+          script: |
+            const issue = context.payload.issue;
+            const labels = issue.labels.map(label => label.name);
+            if (labels.includes('beginner')) {
+              core.setOutput('difficulty', 'beginner');
+            } else if (labels.includes('intermediate')) {
+              core.setOutput('difficulty', 'intermediate');
+            } else if (labels.includes('advanced')) {
+              core.setOutput('difficulty', 'advanced');
+              
+            } else {
+              core.setOutput('difficulty', 'all')
+            }
+
+      - name: Send data to server
+        run: |
+          curl -X POST -H "Content-Type: application/json" -d '{"issueId": "${{github.event.issue.id}}", "issueTitle": "${{github.event.issue.title}}", "issueDescription": "${{github.event.issue.body}}", "issueNumber": "${{github.event.issue.number}}", "difficultyLevel":"${{steps.get_difficulty_label.outputs.difficulty}}", "dateCreated" : "${{github.event.issue.created_at}}", "issueLink": "${{github.event.issue.html_url}}", "repoLink" : "https://github.com/${{github.repository}}", "repoName": "${{github.repository}}", "techUsed": "${{steps.languages.outputs.languages}}"}' $API_ENDPOINT
+  close_issue:
+    if: github.event.issue.state == 'closed' && github.event.issue.author_association == 'OWNER' && contains(github.event.issue.labels.*.name, 'help wanted')
+    runs-on: ubuntu-latest
+
+    env:
+      API_ENDPOINT: "https://gotissues-main.vercel.app/api/closeissue"
+
+    # send the ID of the issue to the server to mark the issue closed
+
+    steps:
+      - run: |
+          echo "Closing issue."
+          echo "${{github.event.issue.id}}"
+           curl -X POST -H "Content-Type: application/json" -d '{"id": "${{github.event.issue.id}}"}' $API_ENDPOINT
